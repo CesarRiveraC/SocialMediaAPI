@@ -7,19 +7,19 @@ namespace SocialMedia.Core.Entities
     {
         public User()
         {
-            Comentarios = new HashSet<Comentario>();
-            Publicacions = new HashSet<Publicacion>();
+            Comments = new HashSet<Comment>();
+            Posts = new HashSet<Post>();
         }
 
-        public int IdUsuario { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
+        public int UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
-        public DateTime FechaNacimiento { get; set; }
-        public string Telefono { get; set; }
-        public bool Activo { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Telephone { get; set; }
+        public bool IsActive { get; set; }
 
-        public virtual ICollection<Comentario> Comentarios { get; set; }
-        public virtual ICollection<Publicacion> Publicacions { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

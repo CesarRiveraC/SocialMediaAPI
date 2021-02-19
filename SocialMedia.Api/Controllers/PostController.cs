@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 
 namespace SocialMedia.Api.Controllers
@@ -19,6 +20,12 @@ namespace SocialMedia.Api.Controllers
         public async Task<IActionResult> GetPosts()
         {
             return Ok(await _postRepository.GetPosts());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPost(int id)
+        {
+            return Ok(await _postRepository.GetPost(id));
         }
     }
 }
