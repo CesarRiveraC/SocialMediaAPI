@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ namespace SocialMedia.Api
         {
             //Inyeccion de dependencias
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //Se utiliza esta libreria AddNewtonsoftJson para manejar el error de referencias circulares en el llamado de los objetos
             services.AddControllers().AddNewtonsoftJson(options =>
             {
