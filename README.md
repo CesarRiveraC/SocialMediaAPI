@@ -6,3 +6,5 @@
 # * Custom Exceptions
 # * Dependency Inyections
 # * Fluent API
+# * Data Transfer Objects(DTO'S)
+# * Automappers
