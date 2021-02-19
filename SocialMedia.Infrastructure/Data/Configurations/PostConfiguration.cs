@@ -14,7 +14,7 @@ namespace SocialMedia.Infrastructure.Data.Configurations
 
             builder.Property(e => e.PostId)
                 .HasColumnName("IdPublicacion")
-                .ValueGeneratedNever();
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.UserId)
                 .HasColumnName("IdUsuario");

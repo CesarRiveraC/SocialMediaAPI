@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Infrastructure.Data;
@@ -27,6 +28,12 @@ namespace SocialMedia.Infrastructure.Repositories
         public async Task<Post> GetPost(int id)
         {
             return await _context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+        }
+
+        public async Task SetPost(Post post)
+        {
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
         }
     }
 }
