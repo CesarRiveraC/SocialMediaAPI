@@ -1,5 +1,6 @@
-using System;
-using Microsoft.AspNetCore.Builder;
+    using System;
+    using FluentValidation.AspNetCore;
+    using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Filters;
 using SocialMedia.Infrastructure.Repositories;
 
 namespace SocialMedia.Api
@@ -39,6 +41,16 @@ namespace SocialMedia.Api
              * yo le voy a entregar(resolver) a esa clase una instancia de esta implementacion(PostRepository).
              */
             services.AddTransient<IPostRepository, PostRepository>();
+
+            //Permite validar los campos de los modelos utilizando la clase ValidationFilter como filtro.
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<ValidationFilter>();
+
+            }).AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
