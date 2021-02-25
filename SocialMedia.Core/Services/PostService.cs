@@ -8,50 +8,49 @@ namespace SocialMedia.Core.Services
 {
     public class PostService : IPostService
     {
-        private readonly IRepository<Post> _postRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PostService(IRepository<Post> postRepository, IRepository<User> userRepository)
+        public PostService(IUnitOfWork unitOfWork)
         {
-            _postRepository = postRepository;
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Post> GetPost(int id)
         {
-            return await _postRepository.GetById(id);
+            return await _unitOfWork.PostRepository.GetById(id);
         }
 
         public async Task<IEnumerable<Post>> GetPosts()
         {
-            return await _postRepository.GetAll();
+            return await _unitOfWork.PostRepository.GetAll();
         }
 
         public async Task InsertPost(Post post)
         {
-            var user = await _userRepository.GetById(post.UserId);
-            if (user==null)
+            var user = await _unitOfWork.UserRepository.GetById(post.UserId);
+            if (user == null)
             {
                 throw new Exception("User don't exist");
             }
+
             if (post.Description.Contains("sexo"))
             {
                 throw new Exception("Content not allowed");
             }
-            
-            await _postRepository.Add(post);
-            
+
+            await _unitOfWork.PostRepository.Add(post);
         }
 
         public async Task<bool> UpdatePost(Post post)
         {
-            await _postRepository.Update(post);
+            await _unitOfWork.PostRepository.Update(post);
             return true;
         }
+
         public async Task<bool> DeletePost(int id)
         {
-           await _postRepository.Delete(id);
-           return true;
+            await _unitOfWork.PostRepository.Delete(id);
+            return true;
         }
     }
 }

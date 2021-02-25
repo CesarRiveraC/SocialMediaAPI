@@ -41,10 +41,12 @@ namespace SocialMedia.Api
             /*Cada vez que en el programa se haga uso de esta abastraccion/interface(IPostRepository),
              * yo le voy a entregar(resolver) a esa clase una instancia de esta implementacion(PostRepository).
              */
+            //services.AddTransient<IPostRepository, PostRepository>();
+            //services.AddTransient<IUserRepository, UserRepository>();
+
+            //Se definió un IPostService para conectar con el IPostRepository a su vez conectado al baseRepository
             services.AddTransient<IPostService, PostService>();
-            services.AddTransient<IPostRepository, PostRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-            //
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 
             //Permite validar los campos de los modelos utilizando la clase ValidationFilter como filtro.
