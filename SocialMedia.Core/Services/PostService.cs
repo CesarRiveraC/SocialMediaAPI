@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
@@ -20,9 +21,9 @@ namespace SocialMedia.Core.Services
             return await _unitOfWork.PostRepository.GetById(id);
         }
 
-        public async Task<IEnumerable<Post>> GetPosts()
+        public  IEnumerable<Post> GetPosts()
         {
-            return await _unitOfWork.PostRepository.GetAll();
+            return  _unitOfWork.PostRepository.GetAll().ToList();
         }
 
         public async Task InsertPost(Post post)
@@ -33,6 +34,11 @@ namespace SocialMedia.Core.Services
                 throw new Exception("User don't exist");
             }
 
+            var userPost = await _unitOfWork.PostRepository.GetPostsByUser(post.UserId);
+            if (userPost.Count() < 10)
+            {
+                var lastPost = userPost.LastOrDefault();
+            }
             if (post.Description.Contains("sexo"))
             {
                 throw new Exception("Content not allowed");
@@ -43,7 +49,8 @@ namespace SocialMedia.Core.Services
 
         public async Task<bool> UpdatePost(Post post)
         {
-            await _unitOfWork.PostRepository.Update(post);
+             _unitOfWork.PostRepository.Update(post);
+             await _unitOfWork.SaveChangesAsync();
             return true;
         }
 
