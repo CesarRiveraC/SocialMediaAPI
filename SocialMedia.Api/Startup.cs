@@ -31,10 +31,8 @@ namespace SocialMedia.Api
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //Se utiliza esta libreria AddNewtonsoftJson para manejar el error de referencias circulares en el llamado de los objetos
-            services.AddControllers().AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            });
+            services.AddControllers(options => { options.Filters.Add<GlobalExceptionFilter>(); }).AddNewtonsoftJson(
+                options => { options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; });
             services.AddDbContext<SocialMediaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SocialMedia")));
 
