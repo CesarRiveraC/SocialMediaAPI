@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Schema;
+using SocialMedia.Core.CustomEntities;
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Exceptions;
 using SocialMedia.Core.Interfaces;
+using SocialMedia.Core.QueryFilters;
 
 namespace SocialMedia.Core.Services
 {
@@ -24,9 +26,27 @@ namespace SocialMedia.Core.Services
             return await _unitOfWork.PostRepository.GetById(id);
         }
 
-        public IEnumerable<Post> GetPosts()
+        public PagedList<Post> GetPosts(PostQueryFilter filters)
         {
-            return _unitOfWork.PostRepository.GetAll().ToList();
+            var posts = _unitOfWork.PostRepository.GetAll();
+            if (filters.UserId != null)
+            {
+                posts = posts.Where(x => x.UserId == filters.UserId);
+            }
+
+            if (filters.Date != null)
+            {
+                posts = posts.Where(x => x.Date.ToShortDateString() == filters.Date?.ToShortDateString());
+            }
+
+            if (filters.Description != null)
+            {
+                posts = posts.Where(x => x.Description.ToLower().Contains(filters.Description.ToLower()));
+            }
+
+            var pagedPosts = PagedList<Post>.CreatePagedList(posts, filters.PageNumber, filters.PageSize);
+
+            return pagedPosts;
         }
 
         public async Task InsertPost(Post post)
@@ -47,7 +67,8 @@ namespace SocialMedia.Core.Services
                 var daysLeftToPost = 7 - totalDays;
                 if (totalDays < 7)
                 {
-                    throw new BusinessException("You're not able to post yet, try again in " + (int)daysLeftToPost + " days.");
+                    throw new BusinessException("You're not able to post yet, try again in " + (int) daysLeftToPost +
+                                                " days.");
                 }
             }
 
